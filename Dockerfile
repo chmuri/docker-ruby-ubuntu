@@ -14,7 +14,7 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
 
 # Etap 2: Ostateczny obraz z Ruby 1.9.3 na Ubuntu 22.04
 FROM ubuntu:22.04
-RUN apt update && apt install -y gnupg2 curl
+RUN apt-get update && apt-get install -y gnupg2 curl
 RUN  install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg |  gpg --dearmor >  /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
 #RUN sed -i 's/^deb http:/deb [arch=amd64  http:/' /etc/apt/sources.list
 # Kopiujemy skompilowany Ruby 1.9.3 z etapu poprzedniego
