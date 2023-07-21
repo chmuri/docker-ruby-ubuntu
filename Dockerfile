@@ -27,7 +27,7 @@ RUN ln -s /usr/local/ruby-1.9.3/bin/ruby /usr/local/bin/ruby \
 
 # Ustawiamy katalog roboczy dla obrazu
 WORKDIR /app
-
+ 
 # Przykładowy skrypt, który może być skopiowany do kontenera i uruchomiony z użyciem Rubiego 1.9.3
 
 # Uruchamiamy skrypt po uruchomieniu kontenera
