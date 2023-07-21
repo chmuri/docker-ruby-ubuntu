@@ -12,10 +12,7 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && make \
     && make install
 
-# Install and update Rubygems and Bundler for Ruby 1.9.3
-RUN gem install rubygems-update -v 2.7.8
-RUN update_rubygems
-RUN gem install bundler -v 1.17.3
+
 
 # Stage 2: Final image with Ruby 1.9.3 on Ubuntu 22.04
 FROM ubuntu:22.04
@@ -39,6 +36,10 @@ RUN ln -s /usr/local/ruby-1.9.3/bin/ruby /usr/local/bin/ruby \
 # Set the working directory for the image
 WORKDIR /app
 
+# Install and update Rubygems and Bundler for Ruby 1.9.3
+RUN gem install rubygems-update -v 2.7.8
+RUN update_rubygems
+RUN gem install bundler -v 1.17.3
 
 # Run the script when the container is launched
 CMD ["ruby"]
