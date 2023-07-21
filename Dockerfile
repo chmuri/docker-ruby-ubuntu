@@ -2,7 +2,7 @@
 FROM ubuntu:22.04 AS builder
 
 # Install dependencies needed for Ruby compilation
-RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget
+RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget glibc-source
 RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz \
     && tar zxvf openssl-1.0.1u.tar.gz \
     && cd openssl-1.0.1u \
