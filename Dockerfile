@@ -11,7 +11,7 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && ./configure --prefix=/usr/local/ruby-1.9.3 \
     && make \
     && make install
-rl <https://example.com/key/repo-key.gpg> | gpg --dearmor > /usr/share/keyrings/<myrepository>-archive-keyring.gpg
+
 # Etap 2: Ostateczny obraz z Ruby 1.9.3 na Ubuntu 22.04
 FROM ubuntu:22.04
 RUN apt update && apt install -y gnupg2 curl
