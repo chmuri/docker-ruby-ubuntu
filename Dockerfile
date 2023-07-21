@@ -3,10 +3,10 @@ FROM ubuntu:22.04 AS builder
 
 # Install dependencies needed for Ruby compilation
 RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget
-RUN wget https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz \
-    && tar zxvf openssl-1.0.2u.tar.gz \
-    && cd openssl-1.0.2u \
-    && ./config --prefix=$HOME/.openssl/openssl-1.0.2u --openssldir=$HOME/.openssl/openssl-1.0.2u \
+RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz \
+    && tar zxvf openssl-1.0.1u.tar.gz \
+    && cd penssl-1.0.1u \
+    && ./config --prefix=$HOME/.openssl/penssl-1.0.1u --openssldir=$HOME/.openssl/penssl-1.0.1u \
     && make \
     && make install
     
@@ -14,7 +14,7 @@ RUN wget https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz \
 RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && tar -xzvf ruby-1.9.3-p551.tar.gz \
     && cd ruby-1.9.3-p551 \
-    && ./configure --prefix=/usr/local/ruby-1.9.3 --with-openssl-dir=$HOME/.openssl/openssl-1.0.2u \
+    && ./configure --prefix=/usr/local/ruby-1.9.3 --with-openssl-dir=$HOME/.openssl/penssl-1.0.1u \
     && make \
     && make install
 
@@ -31,7 +31,7 @@ RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.co
 
 # Copy the compiled Ruby 1.9.3 from the previous stage
 COPY --from=builder /usr/local/ruby-1.9.3 /usr/local/ruby-1.9.3
-COPY --from=builder /root/.openssl/openssl-1.0.2u.tar.gz /root/.openssl/openssl-1.0.2u.tar.gz
+COPY --from=builder /root/.openssl/penssl-1.0.1u.tar.gz /root/.openssl/penssl-1.0.1u.tar.gz
 
 # Add Ruby 1.9.3 to the PATH to run it globally
 ENV PATH="/usr/local/ruby-1.9.3/bin:${PATH}"
