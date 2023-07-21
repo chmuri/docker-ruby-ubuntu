@@ -31,4 +31,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.tag.outputs.tag }}
+          tags: chmuri/ubuntu-ruby:latest
