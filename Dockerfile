@@ -11,6 +11,9 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && ./configure --prefix=/usr/local/ruby-1.9.3 \
     && make \
     && make install
+RUN gem install rubygems-update -v 2.7.8
+RUN update_rubygems
+RUN gem install bundler -v 1.17.3
 
 # Etap 2: Ostateczny obraz z Ruby 1.9.3 na Ubuntu 22.04
 FROM ubuntu:22.04
