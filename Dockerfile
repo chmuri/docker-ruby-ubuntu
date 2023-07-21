@@ -1,39 +1,44 @@
-# Etap 1: Budowanie Ruby 1.9.3 na Ubuntu 22.04
+# Stage 1: Building Ruby 1.9.3 on Ubuntu 22.04
 FROM ubuntu:22.04 AS builder
 
-# Instalujemy zależności potrzebne do kompilacji Ruby
+# Install dependencies needed for Ruby compilation
 RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget
 
-# Pobieramy kod źródłowy Ruby 1.9.3 i kompilujemy
+# Download Ruby 1.9.3 source code and compile
 RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && tar -xzvf ruby-1.9.3-p551.tar.gz \
     && cd ruby-1.9.3-p551 \
     && ./configure --prefix=/usr/local/ruby-1.9.3 \
     && make \
     && make install
+
+# Install and update Rubygems and Bundler for Ruby 1.9.3
 RUN gem install rubygems-update -v 2.7.8
 RUN update_rubygems
 RUN gem install bundler -v 1.17.3
 
-# Etap 2: Ostateczny obraz z Ruby 1.9.3 na Ubuntu 22.04
+# Stage 2: Final image with Ruby 1.9.3 on Ubuntu 22.04
 FROM ubuntu:22.04
+
+# Install necessary packages for the final image
 RUN apt-get update && apt-get install -y gnupg2 curl
-RUN  install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg |  gpg --dearmor >  /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
-#RUN sed -i 's/^deb http:/deb [arch=amd64  http:/' /etc/apt/sources.list
-# Kopiujemy skompilowany Ruby 1.9.3 z etapu poprzedniego
+
+# Setup the Ubuntu keyring for apt
+RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg | gpg --dearmor > /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
+
+# Copy the compiled Ruby 1.9.3 from the previous stage
 COPY --from=builder /usr/local/ruby-1.9.3 /usr/local/ruby-1.9.3
 
-# Dodajemy Ruby 1.9.3 do zmiennej PATH, aby można było go uruchomić globalnie
+# Add Ruby 1.9.3 to the PATH to run it globally
 ENV PATH="/usr/local/ruby-1.9.3/bin:${PATH}"
 
-# Dodatkowo możemy ustawić Ruby 1.9.3 jako domyślną wersję, ale zalecamy korzystanie z nowszych wersji Rubiego.
+# Additionally, we can set Ruby 1.9.3 as the default version, but we recommend using newer versions of Ruby.
 RUN ln -s /usr/local/ruby-1.9.3/bin/ruby /usr/local/bin/ruby \
     && ln -s /usr/local/ruby-1.9.3/bin/gem /usr/local/bin/gem
 
-# Ustawiamy katalog roboczy dla obrazu
+# Set the working directory for the image
 WORKDIR /app
- 
-# Przykładowy skrypt, który może być skopiowany do kontenera i uruchomiony z użyciem Rubiego 1.9.3
 
-# Uruchamiamy skrypt po uruchomieniu kontenera
+
+# Run the script when the container is launched
 CMD ["ruby"]
