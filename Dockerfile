@@ -8,7 +8,6 @@ RUN wget https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz \
     && cd openssl-1.0.2u \
     && ./config --prefix=$HOME/.openssl/openssl-1.0.2u --openssldir=$HOME/.openssl/openssl-1.0.2u \
     && make \
-    && make test \
     && make install
     
 # Download Ruby 1.9.3 source code and compile
