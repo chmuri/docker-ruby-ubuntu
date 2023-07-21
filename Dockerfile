@@ -9,7 +9,7 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && tar -xzvf ruby-1.9.3-p551.tar.gz \
     && cd ruby-1.9.3-p551 \
     && ./configure --prefix=/usr/local/ruby-1.9.3 \
-    && make \
+    && make -j \
     && make install
 
 # Etap 2: Ostateczny obraz z Ruby 1.9.3 na Ubuntu 22.04
