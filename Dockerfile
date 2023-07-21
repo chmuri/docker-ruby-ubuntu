@@ -32,7 +32,7 @@ RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.co
 
 # Copy the compiled Ruby 1.9.3 from the previous stage
 COPY --from=builder /usr/local/ruby-1.9.3 /usr/local/ruby-1.9.3
-COPY --form=builder root/.openssl/openssl-1.1.1g  root/.openssl/openssl-1.1.1g 
+COPY --from=builder /root/.openssl/openssl-1.1.1g  /root/.openssl/openssl-1.1.1g 
 
 # Add Ruby 1.9.3 to the PATH to run it globally
 ENV PATH="/usr/local/ruby-1.9.3/bin:${PATH}"
