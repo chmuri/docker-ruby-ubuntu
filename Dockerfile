@@ -32,4 +32,3 @@ WORKDIR /app
 
 # Uruchamiamy skrypt po uruchomieniu kontenera
 CMD ["ruby"]
-
