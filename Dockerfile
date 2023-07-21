@@ -5,7 +5,7 @@ FROM ubuntu:22.04 AS builder
 RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget
 RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz \
     && tar zxvf openssl-1.0.1u.tar.gz \
-    && cd penssl-1.0.1u \
+    && cd openssl-1.0.1u \
     && ./config --prefix=$HOME/.openssl/penssl-1.0.1u --openssldir=$HOME/.openssl/penssl-1.0.1u \
     && make \
     && make install
