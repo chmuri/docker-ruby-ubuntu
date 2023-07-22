@@ -1,5 +1,5 @@
 # Stage 1: Building Ruby 1.9.3 on Ubuntu 22.04
-FROM ubuntu:22.04 AS builder
+FROM ubuntu:18.04 AS builder
 
 # Install dependencies needed for Ruby compilation
 RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget glibc-source
@@ -9,7 +9,7 @@ RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz \
     && ./config --prefix=$HOME/.openssl/penssl-1.0.1u --openssldir=$HOME/.openssl/penssl-1.0.1u \
     && make \
     && make install
-    
+
 # Download Ruby 1.9.3 source code and compile
 RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
     && tar -xzvf ruby-1.9.3-p551.tar.gz \
@@ -21,7 +21,7 @@ RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
 
 
 # Stage 2: Final image with Ruby 1.9.3 on Ubuntu 22.04
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 # Install necessary packages for the final image
 RUN apt-get update && apt-get install -y gnupg2 curl
