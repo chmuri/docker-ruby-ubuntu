@@ -19,7 +19,7 @@ ENV PATH="/usr/local/rvm/rubies/ruby-1.9.3-p551/bin:${GEM_HOME}/bin:${PATH}"
 RUN useradd -ms /bin/bash rubyapp
 
 # Create the home directory and set proper ownership
-RUN mkdir -p $GEM_HOME && chown -R rubyapp:rubyapp $GEM_HOME && chown -R rubyapp:rubyapp /app
+RUN mkdir -p $GEM_HOME && chown -R rubyapp:rubyapp $GEM_HOME && mkdir -p /app && chown -R rubyapp:rubyapp /app
 
 USER rubyapp
 
