@@ -27,7 +27,7 @@ FROM ubuntu:18.04
 RUN apt-get update && apt-get install -y gnupg2 curl
 
 # Setup the Ubuntu keyring for apt
-RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg | gpg --dearmor > /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
+#RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg | gpg --dearmor > /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
 
 # Copy the compiled Ruby 1.9.3 from the previous stage
 COPY --from=builder /usr/local/ruby-1.9.3 /usr/local/ruby-1.9.3
