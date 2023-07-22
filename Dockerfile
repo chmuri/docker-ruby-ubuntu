@@ -3,7 +3,7 @@ SHELL ["/bin/bash", "-l", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies and Cron
-RUN apt update && apt install gnupg2 curl cron -y
+RUN apt update && apt install gnupg2 curl cron git -y
 
 # Install RVM and Ruby 1.9.3
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import -
