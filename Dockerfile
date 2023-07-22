@@ -1,53 +1,19 @@
-# Stage 1: Building Ruby 1.9.3 on Ubuntu 22.04
-FROM ubuntu:18.04 AS builder
-
-# Install dependencies needed for Ruby compilation
-RUN apt-get update && apt-get install -y build-essential openssl libssl-dev libreadline-dev zlib1g-dev libffi-dev libgdbm-dev libncurses5-dev wget glibc-source
-RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1u.tar.gz \
-    && tar zxvf openssl-1.0.1u.tar.gz \
-    && cd openssl-1.0.1u \
-    && ./config --prefix=$HOME/.openssl/penssl-1.0.1u --openssldir=$HOME/.openssl/penssl-1.0.1u \
-    && make \
-    && make install
-
-# Download Ruby 1.9.3 source code and compile
-RUN wget https://cache.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p551.tar.gz \
-    && tar -xzvf ruby-1.9.3-p551.tar.gz \
-    && cd ruby-1.9.3-p551 \
-    && ./configure --prefix=/usr/local/ruby-1.9.3 --with-openssl-dir=$HOME/.openssl/penssl-1.0.1u \
-    && make \
-    && make install
-
-
-
-# Stage 2: Final image with Ruby 1.9.3 on Ubuntu 22.04
 FROM ubuntu:18.04
-
-# Install necessary packages for the final image
-RUN apt-get update && apt-get install -y gnupg2 curl
-
-# Setup the Ubuntu keyring for apt
-#RUN install -m 0755 -d /etc/apt/keyrings && curl -fsSL http://security.ubuntu.com/ubuntu/ubuntu/project/ubuntu-archive-keyring.gpg | gpg --dearmor > /usr/share/keyrings/ubuntu.gpg && chmod a+r /usr/share/keyrings/ubuntu.gpg
-
-# Copy the compiled Ruby 1.9.3 from the previous stage
-COPY --from=builder /usr/local/ruby-1.9.3 /usr/local/ruby-1.9.3
-COPY --from=builder /root/.openssl/penssl-1.0.1u /root/.openssl/penssl-1.0.1u
-
-# Add Ruby 1.9.3 to the PATH to run it globally
-ENV PATH="/usr/local/ruby-1.9.3/bin:${PATH}"
-
-# Additionally, we can set Ruby 1.9.3 as the default version, but we recommend using newer versions of Ruby.
-RUN ln -s /usr/local/ruby-1.9.3/bin/ruby /usr/local/bin/ruby \
-    && ln -s /usr/local/ruby-1.9.3/bin/gem /usr/local/bin/gem \
-    && ln -s /etc/ssl/certs ~/.openssl/openssl-1.1.1g/certs
-
-# Set the working directory for the image
-WORKDIR /app
-
-# Install and update Rubygems and Bundler for Ruby 1.9.3
+#SHELL [ "/bin/bash", "-l", "-c" ]
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install gnupg2 curl -y 
+#RUN gpg2 --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+RUN curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
+RUN curl -sSL https://get.rvm.io | bash -s
+RUN  /usr/local/rvm/bin/rvm install 1.9.3
+ENV GEM_HOME=$HOME/.gem
+ENV PATH="/usr/local/rvm/rubies/ruby-1.9.3-p551/bin:${PATH}"
+RUN ln -s /usr/local/rvm/rubies/ruby-1.9.3-p551/bin/ruby /usr/local/bin/ruby \
+    && ln -s /usr/local/rvm/rubies/ruby-1.9.3-p551/bin/gem /usr/local/bin/gem \
+    && ln -s /usr/local/rvm/rubies/ruby-1.9.3-p551/bin/bundle /usr/local/bin/bundle
 RUN gem install rubygems-update -v 2.7.8
-RUN update_rubygems
+#RUN /usr/local/rvm/rubies/ruby-1.9.3-p551/bin/update_rubygems
 RUN gem install bundler -v 1.17.3
-
-# Run the script when the container is launched
+WORKDIR /app
 CMD ["ruby"]
